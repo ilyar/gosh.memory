@@ -97,11 +97,61 @@ Memory should be universal — it should support all types of human content.
 ## Quick start
 
 ```bash
-pip install -e .
+uv tool install gosh-memory --force --from git+https://github.com/gosh-dot-ai/gosh.memory
 gosh-memory start --data-dir ./data
 ```
 
 Server runs at `http://127.0.0.1:8765`. Token auto-generated at `~/.gosh-memory/token`.
+
+## Install
+
+### Base install
+
+For CLI / local tool usage:
+
+```bash
+uv tool install gosh-memory --force --from git+https://github.com/gosh-dot-ai/gosh.memory
+```
+
+For local source checkout:
+
+```bash
+uv sync
+```
+
+### Optional extras
+
+The project exposes optional dependencies for integrations that are loaded lazily at runtime.
+
+| Extra | Installs | Use when |
+|------|----------|----------|
+| `local-embed` | `sentence-transformers` | You want local embeddings without an API call |
+| `google` | `google-generativeai` | You want the Google provider integration |
+| `sqlcipher` | `pysqlcipher3` | You want encrypted SQLite storage |
+| `dev` | lint, test, and type-check tooling | You are developing on the repository |
+| `all` | `local-embed` + `google` | You want all optional runtime integrations |
+
+Examples:
+
+```bash
+uv sync --extra dev
+uv sync --extra local-embed
+uv sync --extra google
+uv sync --all-extras
+```
+
+For a source checkout with all contributor tooling and runtime extras:
+
+```bash
+uv sync --extra dev --all-extras
+```
+
+Optional encryption is available by setting `GOSH_MEMORY_ENCRYPTION_KEY` (hex), which enables AES for SQLCipher-backed SQLite for `.sqlite3` files when the `pysqlcipher3` extra and system SQLCipher libraries are installed:
+
+```bash
+sudo apt install libsqlcipher-dev
+uv tool install 'gosh-memory[sqlcipher]' --force --from git+https://github.com/gosh-dot-ai/gosh.memory
+```
 
 ---
 
@@ -123,6 +173,10 @@ Connect gosh.memory as an MCP tool server to your AI assistant. Each has a short
 ### Standalone MCP server
 
 Run gosh.memory directly without gosh.cli. For custom integrations, testing, or embedding into your own stack. [Standalone setup](https://github.com/gosh-dot-ai/gosh.docs/blob/dev/SETUP.md#mode-2-standalone--mcp-server-directly)
+
+### Development
+
+Repository setup, linting, tests, and lockfile policy are documented in [DEVELOP.md](DEVELOP.md).
 
 ---
 
